@@ -13,10 +13,12 @@ import {
   Sparkles,
   ChevronDown,
   ChevronUp,
-  BookOpen
+  BookOpen,
+  Printer
 } from 'lucide-react';
 import { OFFICIAL_EXAMS } from '../data/examsData';
 import { Exam, Question } from '../types';
+import { printDocument } from '../utils/printUtils';
 
 export const ExamsHub: React.FC = () => {
   const [selectedExamId, setSelectedExamId] = useState<string>(OFFICIAL_EXAMS[0].id);
@@ -84,6 +86,85 @@ export const ExamsHub: React.FC = () => {
         origin: { y: 0.6 },
       });
     }
+  };
+
+  const handlePrintExam = (withAnswers: boolean) => {
+    const questionsHtml = currentExam.questions
+      .map((q, idx) => {
+        let optionsHtml = '';
+        if (q.type === 'mcq' && q.options) {
+          optionsHtml = `
+            <div style="margin: 8px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              ${q.options
+                .map((opt, oIdx) => {
+                  const isCorrect = withAnswers && q.correctAnswer === oIdx;
+                  return `
+                    <div style="padding: 6px 12px; border-radius: 6px; border: 1px solid ${
+                      isCorrect ? '#10b981' : '#e5e7eb'
+                    }; background: ${isCorrect ? '#ecfdf5' : '#ffffff'}; font-size: 13px;">
+                      <span style="font-weight: bold; margin-left: 6px;">(${['أ', 'ب', 'ج', 'د'][oIdx] || oIdx + 1})</span>
+                      ${opt} ${isCorrect ? '<strong style="color: #059669;">✔ (الإجابة الصحيحة)</strong>' : ''}
+                    </div>
+                  `;
+                })
+                .join('')}
+            </div>
+          `;
+        } else if (q.type === 'true_false') {
+          optionsHtml = `
+            <div style="margin: 8px 0; display: flex; gap: 20px; font-size: 13px;">
+              <span style="padding: 4px 12px; border: 1px solid #e5e7eb; border-radius: 6px; background: ${
+                withAnswers && q.correctAnswer === true ? '#ecfdf5; border-color: #10b981; font-weight: bold; color: #059669;' : '#ffffff;'
+              }">
+                ( ) صواب ${withAnswers && q.correctAnswer === true ? '✔' : ''}
+              </span>
+              <span style="padding: 4px 12px; border: 1px solid #e5e7eb; border-radius: 6px; background: ${
+                withAnswers && q.correctAnswer === false ? '#ecfdf5; border-color: #10b981; font-weight: bold; color: #059669;' : '#ffffff;'
+              }">
+                ( ) خطأ ${withAnswers && q.correctAnswer === false ? '✔' : ''}
+              </span>
+            </div>
+          `;
+        }
+
+        const explanationHtml =
+          withAnswers && q.explanation
+            ? `
+          <div style="margin-top: 8px; padding: 8px 12px; background: #eff6ff; border-right: 3px solid #1d4ed8; font-size: 12px; color: #1e40af; border-radius: 4px;">
+            <strong>💡 التفسير النموذجي لمستر بحيري:</strong> ${q.explanation}
+            ${q.pageReference ? `<span style="display: block; margin-top: 4px; color: #6b7280;">(مرجع الكتاب: صـ ${q.pageReference})</span>` : ''}
+          </div>
+        `
+            : '';
+
+        return `
+          <div style="margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px dashed #d1d5db; page-break-inside: avoid;">
+            <div style="font-weight: bold; font-size: 14px; color: #111827; margin-bottom: 6px;">
+              <span style="color: #1d4ed8;">س ${idx + 1}:</span> ${q.questionText}
+            </div>
+            ${optionsHtml}
+            ${explanationHtml}
+          </div>
+        `;
+      })
+      .join('');
+
+    const instructionsHtml = `
+      <div style="margin-bottom: 20px; padding: 10px 14px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px;">
+        <strong>تعليمات ورقة الامتحان:</strong>
+        <span style="margin-right: 15px;">زمن الإجابة: ${currentExam.durationMinutes} دقيقة</span>
+        <span style="margin-right: 15px;">عدد الأسئلة: ${currentExam.questions.length} أسئلة</span>
+        <span style="margin-right: 15px;">النوع: ${withAnswers ? 'نموذج الإجابة المعتمد' : 'ورقة الأسئلة للحل والتدريب'}</span>
+      </div>
+    `;
+
+    printDocument({
+      title: currentExam.title,
+      subtitle: `${currentExam.term} - ${currentExam.year} | ${currentExam.administration || 'إدارة تعليمية معتمدة'}`,
+      unitTitle: withAnswers ? 'نموذج الإجابة الرسمي والمفصل' : 'ورقة امتحان تجريبي رسمي',
+      author: 'إشراف ومراجعة: مستر بحيري (#Be7ery)',
+      htmlContent: instructionsHtml + questionsHtml,
+    });
   };
 
   const formatTime = (sec: number) => {
@@ -182,13 +263,31 @@ export const ExamsHub: React.FC = () => {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => startLiveExam(currentExam)}
-                  className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 text-xs md:text-sm"
-                >
-                  <Play className="w-4 h-4 fill-current" />
-                  بدء الامتحان بوقت محدد
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    onClick={() => handlePrintExam(false)}
+                    className="px-4 py-2.5 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-[#1D4ED8] border border-gray-200 hover:border-blue-200 font-bold rounded-2xl transition-all flex items-center justify-center gap-2 text-xs"
+                    title="طباعة ورقة الامتحان خالية بدون إجابات للحل والتدريب الورقي"
+                  >
+                    <Printer className="w-4 h-4 text-[#1D4ED8]" />
+                    <span>طباعة ورقة الأسئلة</span>
+                  </button>
+                  <button
+                    onClick={() => handlePrintExam(true)}
+                    className="px-4 py-2.5 bg-gray-50 hover:bg-emerald-50 text-gray-700 hover:text-emerald-700 border border-gray-200 hover:border-emerald-200 font-bold rounded-2xl transition-all flex items-center justify-center gap-2 text-xs"
+                    title="طباعة نموذج الإجابة الرسمي المعتمد مع الشرح"
+                  >
+                    <FileText className="w-4 h-4 text-emerald-600" />
+                    <span>طباعة نموذج الإجابة</span>
+                  </button>
+                  <button
+                    onClick={() => startLiveExam(currentExam)}
+                    className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 text-xs md:text-sm"
+                  >
+                    <Play className="w-4 h-4 fill-current" />
+                    بدء الامتحان بوقت محدد
+                  </button>
+                </div>
               </div>
 
               {/* Questions List with Solutions */}

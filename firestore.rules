@@ -1,0 +1,90 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidDeviceVisit(data) {
+      return data.deviceId is string && data.deviceId.size() >= 1 && data.deviceId.size() <= 128
+        && data.visitCount is number && data.visitCount >= 1 && data.visitCount <= 10000000
+        && (!('deviceType' in data) || (data.deviceType is string && data.deviceType.size() <= 50))
+        && (!('os' in data) || (data.os is string && data.os.size() <= 50))
+        && (!('browser' in data) || (data.browser is string && data.browser.size() <= 50))
+        && (!('firstVisitAt' in data) || (data.firstVisitAt is string && data.firstVisitAt.size() <= 50))
+        && (!('lastVisitAt' in data) || (data.lastVisitAt is string && data.lastVisitAt.size() <= 50))
+        && (!('fullName' in data) || (data.fullName is string && data.fullName.size() >= 2 && data.fullName.size() <= 100))
+        && (!('age' in data) || (data.age is number && data.age >= 6 && data.age <= 120))
+        && (!('educationalAdmin' in data) || (data.educationalAdmin is string && data.educationalAdmin.size() >= 2 && data.educationalAdmin.size() <= 100))
+        && (!('schoolName' in data) || (data.schoolName is string && data.schoolName.size() >= 2 && data.schoolName.size() <= 120))
+        && (!('isRegistered' in data) || (data.isRegistered is bool))
+        && (!('registeredAt' in data) || (data.registeredAt is string && data.registeredAt.size() <= 50));
+    }
+
+    function isValidVisitor(data) {
+      return data.deviceId is string && data.deviceId.size() >= 1 && data.deviceId.size() <= 128
+        && data.fullName is string && data.fullName.size() >= 2 && data.fullName.size() <= 100
+        && data.age is number && data.age >= 6 && data.age <= 120
+        && data.educationalAdmin is string && data.educationalAdmin.size() >= 2 && data.educationalAdmin.size() <= 100
+        && data.schoolName is string && data.schoolName.size() >= 2 && data.schoolName.size() <= 120
+        && (!('visitCount' in data) || (data.visitCount is number && data.visitCount >= 1))
+        && (!('lastVisitAt' in data) || (data.lastVisitAt is string && data.lastVisitAt.size() <= 50))
+        && (!('registeredAt' in data) || (data.registeredAt is string && data.registeredAt.size() <= 50))
+        && (!('isPublic' in data) || (data.isPublic is bool));
+    }
+
+    function isValidGlobalStats(data) {
+      return data.totalVisits is number && data.totalVisits >= 0
+        && data.uniqueDevices is number && data.uniqueDevices >= 0
+        && (!('registeredStudentsCount' in data) || (data.registeredStudentsCount is number && data.registeredStudentsCount >= 0))
+        && (!('lastUpdated' in data) || (data.lastUpdated is string && data.lastUpdated.size() <= 50));
+    }
+
+    // Individual device tracking with student profile
+    match /devices/{deviceId} {
+      allow get: if isValidId(deviceId);
+      allow create: if isValidId(deviceId) 
+                    && isValidDeviceVisit(incoming()) 
+                    && incoming().deviceId == deviceId;
+      allow update: if isValidId(deviceId) 
+                    && isValidDeviceVisit(incoming()) 
+                    && incoming().deviceId == deviceId;
+      allow list, delete: if false;
+    }
+
+    // Student directory profiles
+    match /visitors/{deviceId} {
+      allow get: if isValidId(deviceId);
+      allow create: if isValidId(deviceId)
+                    && isValidVisitor(incoming())
+                    && incoming().deviceId == deviceId;
+      allow update: if isValidId(deviceId)
+                    && isValidVisitor(incoming())
+                    && incoming().deviceId == deviceId;
+      allow list: if resource.data.isPublic == true;
+      allow delete: if false;
+    }
+
+    // Global aggregated stats
+    match /stats/{statDoc} {
+      allow get: if statDoc == 'visits';
+      allow create, update: if statDoc == 'visits' && isValidGlobalStats(incoming());
+      allow list, delete: if false;
+    }
+
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

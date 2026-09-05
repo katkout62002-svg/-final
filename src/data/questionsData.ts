@@ -818,5 +818,171 @@ export const UNIT_QUESTIONS: Record<string, Question[]> = {
       explanation: 'الجمع الكامل تستقبل 3 مدخلات (A, B, Cin) وتتعامل مع سلاسل الأعداد الطويلة.',
       pageReference: 171
     }
+  ],
+  'u8-l1': [
+    {
+      id: 'q-u8l1-1',
+      lessonId: 'u8-l1',
+      unitId: 'unit-8',
+      type: 'mcq',
+      questionText: 'أي من الرموز التالية يُستخدم في مخطط الانسياب لاتخاذ القرار والشرط؟',
+      options: ['المستطيل', 'المعين (Diamond)', 'متوازي الأضلاع', 'الشكل البيضاوي'],
+      correctAnswer: 1,
+      explanation: 'رمز المعين يُستخدم في مخطط الانسياب للشرط واتخاذ القرار وله مخرجان على الأقل (Yes / No).',
+      pageReference: 180
+    },
+    {
+      id: 'q-u8l1-2',
+      lessonId: 'u8-l1',
+      unitId: 'unit-8',
+      type: 'mcq',
+      questionText: 'تقسيم المشكلة الكبيرة المعقدة إلى مشكلات فرعية أصغر يسمى في التفكير الحوسبي:',
+      options: ['التجريد (Abstraction)', 'التفكيك (Decomposition)', 'التعرف على الأنماط', 'البرمجة'],
+      correctAnswer: 1,
+      explanation: 'التفكيك (Decomposition) هو تجزئة المسألة الكبيرة إلى أجزاء أصغر يسهل فهمها وحلها.',
+      pageReference: 181
+    },
+    {
+      id: 'q-u8l1-3',
+      lessonId: 'u8-l1',
+      unitId: 'unit-8',
+      type: 'mcq',
+      questionText: 'الشكل البيضاوي في مخططات الانسياب يمثل:',
+      options: ['إدخال وإخراج البيانات', 'إجراء العمليات الحسابية', 'البداية أو النهاية (Start / End)', 'الشرط'],
+      correctAnswer: 2,
+      explanation: 'الشكل البيضاوي مخصص لتحديد نقطة بداية البرنامج أو نهايته.',
+      pageReference: 182
+    }
+  ],
+  'u8-l2': [
+    {
+      id: 'q-u8l2-1',
+      lessonId: 'u8-l2',
+      unitId: 'unit-8',
+      type: 'mcq',
+      questionText: 'في لغة بايثون، ما هو ناتج العملية: 17 // 5 ؟',
+      options: ['3.4', '3', '2', '1'],
+      correctAnswer: 1,
+      explanation: 'المعامل // في بايثون يمثل القسمة الصحيحة وتجاهل الكسر، 17 // 5 = 3.',
+      pageReference: 190
+    },
+    {
+      id: 'q-u8l2-2',
+      lessonId: 'u8-l2',
+      unitId: 'unit-8',
+      type: 'mcq',
+      questionText: 'ما هو النوع البياني الذي تعيده دالة input() في بايثون افتراضياً؟',
+      options: ['عدد صحيح (int)', 'عدد عشري (float)', 'سلسلة نصية (str)', 'قيمة منطقية (bool)'],
+      correctAnswer: 2,
+      explanation: 'دالة input() تستقبل المدخلات دائماً كـ String نصي، ويلزم استخدام int() أو float() لتحويلها لأرقام.',
+      pageReference: 192
+    },
+    {
+      id: 'q-u8l2-3',
+      lessonId: 'u8-l2',
+      unitId: 'unit-8',
+      type: 'mcq',
+      questionText: 'أي من أسماء المتغيرات التالية صحيح ومقبول في بايثون؟',
+      options: ['2nd_score', 'student-name', 'total_score', 'class'],
+      correctAnswer: 2,
+      explanation: 'total_score اسم صحيح؛ لأنه يبدأ بحرف ولا يحتوي على رموز خاصة عدا الشرطة السفلية، و class كلمة محجوزة.',
+      pageReference: 193
+    }
+  ],
+  'u8-l3': [
+    {
+      id: 'q-u8l3-1',
+      lessonId: 'u8-l3',
+      unitId: 'unit-8',
+      type: 'mcq',
+      questionText: 'تعتمد لغة بايثون على ........... لتحديد بداية ونهاية الكتل البرمجية التابعة للشروط والحلقات:',
+      options: ['الأقواس المتعرجة {}', 'المسافات البادئة (Indentation)', 'الفواصل المنقوطة ;', 'علامات التنصيص'],
+      correctAnswer: 1,
+      explanation: 'المسافات البادئة هي السمة المميزة لبايثون لتحديد التبعية المنطقية للأوامر البرمجية.',
+      pageReference: 200
+    },
+    {
+      id: 'q-u8l3-2',
+      lessonId: 'u8-l3',
+      unitId: 'unit-8',
+      type: 'mcq',
+      questionText: 'الأمر المستخدم للخروج الفوري وإنهاء حلقة التكرار في بايثون هو:',
+      options: ['pass', 'continue', 'break', 'stop'],
+      correctAnswer: 2,
+      explanation: 'الأمر break ينهي عمل الحلقة تماماً ويخرج منها فوراً.',
+      pageReference: 202
+    }
+  ],
+  'u9-l1': [
+    {
+      id: 'q-u9l1-1',
+      lessonId: 'u9-l1',
+      unitId: 'unit-9',
+      type: 'mcq',
+      questionText: 'جميع تطبيقات وأنظمة الذكاء الاصطناعي المستخدمة اليوم في الهواتف والشركات تُصنف كـ:',
+      options: ['ذكاء اصطناعي عام (General AI)', 'ذكاء اصطناعي فائق (Super AI)', 'ذكاء اصطناعي ضيق/محدود (Narrow AI)', 'ذكاء واعي'],
+      correctAnswer: 2,
+      explanation: 'جميع الأنظمة الحالية مخصصة لمهام محددة (Narrow AI) مثل التوصيات أو التعرف على الصوت أو تشخيص الصور.',
+      pageReference: 210
+    },
+    {
+      id: 'q-u9l1-2',
+      lessonId: 'u9-l1',
+      unitId: 'unit-9',
+      type: 'mcq',
+      questionText: 'اختبار تورينج (Turing Test) صُمم أساساً من أجل:',
+      options: ['قياس سرعة معالجة الحاسوب', 'قياس قدرة الآلة على محاكاة السلوك البشري الذكي', 'فحص أمان كلمات المرور', 'اختبار شاشات العرض'],
+      correctAnswer: 1,
+      explanation: 'يقيس اختبار تورينج مدى قدرة الآلة على إظهار سلوك لا يمكن للإنسان تمييزه عن السلوك البشري.',
+      pageReference: 212
+    }
+  ],
+  'u9-l2': [
+    {
+      id: 'q-u9l2-1',
+      lessonId: 'u9-l2',
+      unitId: 'unit-9',
+      type: 'mcq',
+      questionText: 'التعلم الذي يعتمد على تزويد النموذج ببيانات مصنفة ومصحوبة بالإجابات الصحيحة يسمى:',
+      options: ['التعلم التعزيزي (Reinforcement)', 'التعلم غير الخاضع لإشراف (Unsupervised)', 'التعلم بإشراف (Supervised Learning)', 'التعلم العشوائي'],
+      correctAnswer: 2,
+      explanation: 'التعلم بإشراف (Supervised) يستخدم بيانات مصنفة مسبقاً (Labeled Data).',
+      pageReference: 220
+    },
+    {
+      id: 'q-u9l2-2',
+      lessonId: 'u9-l2',
+      unitId: 'unit-9',
+      type: 'mcq',
+      questionText: 'الذكاء الاصطناعي القادر على ابتكار نصوص ورسومات وأكواد برمجية جديدة بناء على أوامر المستخدم يُعرف بـ:',
+      options: ['الذكاء الاصطناعي التقليدي', 'الذكاء الاصطناعي التوليدي (Generative AI)', 'المنطق البولياني', 'أنظمة التشغيل'],
+      correctAnswer: 1,
+      explanation: 'الذكاء التوليدي (Generative AI) يبتكر محتوى جديداً مثل النصوص والصور بناء على النماذج التوليدية.',
+      pageReference: 222
+    }
+  ],
+  'u9-l3': [
+    {
+      id: 'q-u9l3-1',
+      lessonId: 'u9-l3',
+      unitId: 'unit-9',
+      type: 'mcq',
+      questionText: 'عندما تصدر خوارزمية الذكاء الاصطناعي قرارات غير منصفة تجاه فئة معينة بسبب بيانات التدريب، يُسمى هذا:',
+      options: ['الأمن السيبراني', 'الانحياز الخوارزمي (Algorithmic Bias)', 'التعلم العميق', 'الاستخدام العادل'],
+      correctAnswer: 1,
+      explanation: 'الانحياز الخوارزمي هو انحراف نتائج النظام الآلي بسبب البيانات غير المتوازنة التي تم تدريبه عليها.',
+      pageReference: 230
+    },
+    {
+      id: 'q-u9l3-2',
+      lessonId: 'u9-l3',
+      unitId: 'unit-9',
+      type: 'mcq',
+      questionText: 'تقنية استخدام الذكاء الاصطناعي لتعديل وتبديل الوجوه والأصوات في مقاطع الفيديو بشكل واقعي تسمى:',
+      options: ['التزييف العميق (Deepfake)', 'التصيد الاحتيالي', 'الترميز الموحد', 'المشاع الإبداعي'],
+      correctAnswer: 0,
+      explanation: 'التزييف العميق (Deepfake) تقنية اصطناعية لإنتاج وسائط مزيفة عالية الواقعية.',
+      pageReference: 232
+    }
   ]
 };

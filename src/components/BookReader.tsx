@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { UNITS_DATA } from '../data/bookData';
 import { Lesson, Unit } from '../types';
+import { printDocument } from '../utils/printUtils';
 
 interface BookReaderProps {
   onStartLessonQuiz: (lessonId: string) => void;
@@ -88,6 +89,103 @@ export const BookReader: React.FC<BookReaderProps> = ({
       setSelectedLessonId(prev.id);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  };
+
+  const handlePrintLesson = () => {
+    // Generate clean structured HTML for printing
+    const sectionsHtml = currentLesson.sections
+      .map(
+        (sec) => `
+      <div class="lesson-section">
+        <div class="section-title">${sec.title}</div>
+        ${sec.content.map((p) => `<p style="margin-bottom: 8px;">${p}</p>`).join('')}
+        ${
+          sec.subsections
+            ? sec.subsections
+                .map(
+                  (sub) => `
+            <div class="subsection">
+              <h4>${sub.title}</h4>
+              ${sub.explanation ? `<p>${sub.explanation}</p>` : ''}
+              ${sub.example ? `<p style="color: #4b5563; font-size: 13px;"><strong>مثال:</strong> ${sub.example}</p>` : ''}
+              ${
+                sub.items
+                  ? `<ul style="margin: 6px 0; padding-right: 20px;">
+                      ${sub.items.map((it) => `<li>${it}</li>`).join('')}
+                    </ul>`
+                  : ''
+              }
+            </div>
+          `
+                )
+                .join('')
+            : ''
+        }
+        ${
+          sec.highlightBox
+            ? `
+          <div class="box-tip">
+            <strong>💡 ${sec.highlightBox.title}:</strong>
+            <p style="margin: 4px 0 0 0;">${sec.highlightBox.text}</p>
+          </div>
+        `
+            : ''
+        }
+      </div>
+    `
+      )
+      .join('');
+
+    const termsHtml =
+      currentLesson.keyTerms && currentLesson.keyTerms.length > 0
+        ? `
+      <div style="margin-top: 24px; page-break-inside: avoid;">
+        <div class="section-title">المصطلحات والمفاهيم الأساسية</div>
+        <table class="terms-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">المصطلح العربي</th>
+              <th style="width: 25%;">المصطلح الإنجليزي</th>
+              <th style="width: 50%;">التعريف المعتمد</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${currentLesson.keyTerms
+              .map(
+                (t) => `
+              <tr>
+                <td style="font-weight: bold; color: #111827;">${t.arabic}</td>
+                <td style="font-family: monospace; color: #1d4ed8;">${t.english}</td>
+                <td>${t.definition}</td>
+              </tr>
+            `
+              )
+              .join('')}
+          </tbody>
+        </table>
+      </div>
+    `
+        : '';
+
+    const summaryHtml =
+      currentLesson.summary && currentLesson.summary.length > 0
+        ? `
+      <div style="margin-top: 24px; page-break-inside: avoid;">
+        <div class="section-title">ملخص أهم نقاط الدرس</div>
+        <ul style="padding-right: 20px; line-height: 1.8;">
+          ${currentLesson.summary.map((s) => `<li>${s}</li>`).join('')}
+        </ul>
+      </div>
+    `
+        : '';
+
+    printDocument({
+      title: currentLesson.title,
+      subtitle: currentLesson.subtitle,
+      unitTitle: currentUnit.title,
+      author: 'إعداد ومراجعة: مستر بحيري (#Be7ery)',
+      htmlContent: sectionsHtml + termsHtml + summaryHtml,
+    });
   };
 
   const fontClass = {
@@ -211,6 +309,16 @@ export const BookReader: React.FC<BookReaderProps> = ({
                 A++
               </button>
             </div>
+
+            {/* Print / Export Button */}
+            <button
+              onClick={handlePrintLesson}
+              className="p-2 rounded-xl border border-gray-200 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-[#1D4ED8] hover:border-blue-200 transition-colors flex items-center gap-1.5 text-xs font-bold"
+              title="طباعة مذكرة الدرس / حفظ كـ PDF"
+            >
+              <Printer className="w-4 h-4 text-[#1D4ED8]" />
+              <span className="hidden sm:inline">طباعة الدرس</span>
+            </button>
 
             {/* Bookmark Button */}
             <button
@@ -436,6 +544,14 @@ export const BookReader: React.FC<BookReaderProps> = ({
         {/* Bottom Navigation & Quiz Link */}
         <div className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3 w-full md:w-auto">
+            <button
+              onClick={handlePrintLesson}
+              className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-[#1D4ED8] rounded-2xl text-xs font-bold border border-gray-200 transition-colors"
+              title="طباعة نسخة ورقية معتمدة أو حفظ كـ PDF"
+            >
+              <Printer className="w-4 h-4 text-[#1D4ED8]" />
+              <span>طباعة المذكرة (PDF)</span>
+            </button>
             <button
               onClick={prevLesson}
               className="flex-1 md:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-2xl text-xs font-bold border border-gray-200 transition-colors"

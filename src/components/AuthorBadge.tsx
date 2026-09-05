@@ -1,21 +1,30 @@
 import React from 'react';
-import { Sparkles, Code2, Cpu, Award, BookOpen, Layers } from 'lucide-react';
+import { Sparkles, Code2, Cpu, Award, BookOpen, Layers, Download } from 'lucide-react';
 import { Be7eryLogo } from './Be7eryLogo';
 
 interface AuthorBadgeProps {
   compact?: boolean;
+  onOpenInstallApk?: () => void;
 }
 
-export const AuthorBadge: React.FC<AuthorBadgeProps> = ({ compact = false }) => {
+export const AuthorBadge: React.FC<AuthorBadgeProps> = ({ compact = false, onOpenInstallApk }) => {
   if (compact) {
     return (
       <div className="flex items-center gap-3 bg-white border border-gray-200 rounded-2xl p-3 shadow-sm">
+        <div className="w-10 h-10 rounded-xl overflow-hidden border border-blue-100 shadow-xs shrink-0">
+          <img
+            src="/teacher_be7ery.jpg"
+            alt="مستر بحيري"
+            className="w-full h-full object-cover object-top"
+            referrerPolicy="no-referrer"
+          />
+        </div>
         <Be7eryLogo size="sm" showSignature={false} />
         <div className="text-right pr-2 border-r border-gray-200">
           <div className="text-sm font-bold text-gray-900">
             البرمجة والذكاء الاصطناعي
           </div>
-          <p className="text-xs text-gray-500">الصف الأول الثانوي - المنهج الرسمي</p>
+          <p className="text-xs text-gray-500">مستر بحيري • الصف الأول الثانوي</p>
         </div>
       </div>
     );
@@ -59,11 +68,22 @@ export const AuthorBadge: React.FC<AuthorBadgeProps> = ({ compact = false }) => 
           </div>
         </div>
 
-        {/* Prominent standalone Logo Card situated clearly on the side */}
-        <div className="relative z-10 shrink-0 bg-white p-5 sm:p-6 rounded-3xl shadow-xl border border-white/30 flex flex-col items-center justify-center gap-2 text-center">
-          <Be7eryLogo size="lg" showSignature={false} />
-          <div className="text-[11px] font-bold text-gray-500 font-mono tracking-wider pt-1 border-t border-gray-100 w-full">
-            OFFICIAL PLATFORM
+        {/* Prominent standalone Teacher & Logo Card situated clearly on the side */}
+        <div className="relative z-10 shrink-0 bg-white p-5 sm:p-6 rounded-3xl shadow-xl border border-white/30 flex flex-col items-center justify-center gap-3 text-center">
+          <div className="flex items-center gap-3">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden shadow-md border-2 border-blue-500/20 ring-2 ring-blue-100 shrink-0 bg-blue-50">
+              <img
+                src="/teacher_be7ery.jpg"
+                alt="مستر بحيري"
+                className="w-full h-full object-cover object-top"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <Be7eryLogo size="md" showSignature={false} />
+          </div>
+          <div className="text-[11px] font-bold text-gray-500 font-mono tracking-wider pt-2 border-t border-gray-100 w-full flex items-center justify-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span>مستر بحيري • #Be7ery</span>
           </div>
         </div>
 
@@ -104,12 +124,31 @@ export const AuthorBadge: React.FC<AuthorBadgeProps> = ({ compact = false }) => 
 
         <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
           <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl overflow-hidden border border-blue-100 shadow-xs shrink-0">
+              <img
+                src="/teacher_be7ery.jpg"
+                alt="مستر بحيري"
+                className="w-full h-full object-cover object-top"
+                referrerPolicy="no-referrer"
+              />
+            </div>
             <Be7eryLogo size="sm" showSignature={false} />
             <div className="pr-2 border-r border-gray-200">
-              <div className="text-xs font-bold text-gray-900">البرمجة والذكاء الاصطناعي</div>
-              <div className="text-[11px] text-gray-500">الصف الأول الثانوي - 2026</div>
+              <div className="text-xs font-bold text-gray-900">مستر بحيري</div>
+              <div className="text-[11px] text-gray-500">البرمجة والذكاء الاصطناعي - 2026</div>
             </div>
           </div>
+
+          {onOpenInstallApk && (
+            <button
+              onClick={onOpenInstallApk}
+              className="px-3 py-1.5 bg-gradient-to-r from-blue-700 to-indigo-700 hover:from-blue-800 hover:to-indigo-800 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-2xs cursor-pointer transition-all border border-blue-400/30"
+              title="تثبيت التطبيق على هواتف الأندرويد"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>تطبيق APK</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

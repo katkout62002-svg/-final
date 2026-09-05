@@ -102,7 +102,7 @@ export interface GlossaryItem {
   unit?: string;
   unitId?: string;
   definition: string;
-  category?: 'information' | 'ethics' | 'security' | 'binary' | 'hardware' | 'logic';
+  category?: 'information' | 'ethics' | 'security' | 'binary' | 'hardware' | 'logic' | 'programming' | 'ai';
 }
 
 export interface StudyNote {

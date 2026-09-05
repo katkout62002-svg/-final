@@ -12,10 +12,10 @@ export const Be7eryLogo: React.FC<Be7eryLogoProps> = ({
   showSignature = false,
 }) => {
   const sizeClasses = {
-    sm: 'h-8 sm:h-9',
-    md: 'h-11 sm:h-12',
-    lg: 'h-16 sm:h-20',
-    xl: 'h-24 sm:h-28',
+    sm: 'h-8 sm:h-9 max-h-9',
+    md: 'h-11 sm:h-12 max-h-12',
+    lg: 'h-16 sm:h-20 max-h-20',
+    xl: 'h-24 sm:h-28 max-h-28',
   };
 
   const [imgError, setImgError] = React.useState(false);
@@ -25,11 +25,18 @@ export const Be7eryLogo: React.FC<Be7eryLogoProps> = ({
       <div className="relative flex items-center shrink-0">
         {!imgError ? (
           <img
-            src="/be7ery_logo.jpg"
+            src="/be7ery_logo.png"
             alt="#Be7ery Logo"
-            className={`${sizeClasses[size]} w-auto object-contain drop-shadow-xs transition-transform hover:scale-105`}
+            className={`${sizeClasses[size]} w-auto object-contain drop-shadow-xs transition-transform duration-200 hover:scale-105`}
             referrerPolicy="no-referrer"
-            onError={() => setImgError(true)}
+            onError={(e) => {
+              const target = e.currentTarget as HTMLImageElement;
+              if (target.src.endsWith('.png')) {
+                target.src = '/be7ery_logo.jpg';
+              } else {
+                setImgError(true);
+              }
+            }}
           />
         ) : (
           <div className="px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-[#1D4ED8] font-black text-sm font-mono">

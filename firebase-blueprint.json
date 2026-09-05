@@ -1,0 +1,146 @@
+{
+  "entities": {
+    "DeviceVisit": {
+      "title": "DeviceVisit",
+      "description": "Records visit statistics, hardware metadata, and optional student visitor profile for a specific device.",
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "description": "Unique persistent device identifier generated on the client."
+        },
+        "visitCount": {
+          "type": "number",
+          "description": "Number of times this device has opened the application."
+        },
+        "deviceType": {
+          "type": "string",
+          "description": "Device category such as mobile, tablet, or desktop."
+        },
+        "os": {
+          "type": "string",
+          "description": "Operating system of the client device."
+        },
+        "browser": {
+          "type": "string",
+          "description": "Browser family used to access the application."
+        },
+        "firstVisitAt": {
+          "type": "string",
+          "description": "ISO timestamp of the first recorded visit."
+        },
+        "lastVisitAt": {
+          "type": "string",
+          "description": "ISO timestamp of the most recent visit."
+        },
+        "fullName": {
+          "type": "string",
+          "description": "Student or visitor full name."
+        },
+        "age": {
+          "type": "number",
+          "description": "Age of the student or visitor."
+        },
+        "educationalAdmin": {
+          "type": "string",
+          "description": "Educational administration / directorate (الإدارة التعليمية)."
+        },
+        "schoolName": {
+          "type": "string",
+          "description": "Name of the school the student belongs to."
+        },
+        "isRegistered": {
+          "type": "boolean",
+          "description": "Whether the visitor submitted their student information."
+        },
+        "registeredAt": {
+          "type": "string",
+          "description": "ISO timestamp when the student profile was submitted."
+        }
+      },
+      "required": ["deviceId", "visitCount"]
+    },
+    "VisitorProfile": {
+      "title": "VisitorProfile",
+      "description": "Public directory entry of registered student visitors.",
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "description": "Unique persistent device identifier."
+        },
+        "fullName": {
+          "type": "string",
+          "description": "Student or visitor name."
+        },
+        "age": {
+          "type": "number",
+          "description": "Student or visitor age."
+        },
+        "educationalAdmin": {
+          "type": "string",
+          "description": "Educational administration (الإدارة التعليمية)."
+        },
+        "schoolName": {
+          "type": "string",
+          "description": "Name of school (اسم المدرسة)."
+        },
+        "visitCount": {
+          "type": "number",
+          "description": "Total visits recorded for this student."
+        },
+        "lastVisitAt": {
+          "type": "string",
+          "description": "ISO timestamp of latest visit."
+        },
+        "registeredAt": {
+          "type": "string",
+          "description": "ISO timestamp of initial registration."
+        },
+        "isPublic": {
+          "type": "boolean",
+          "description": "Flag enabling visibility in the student directory."
+        }
+      },
+      "required": ["deviceId", "fullName", "educationalAdmin", "schoolName"]
+    },
+    "GlobalStats": {
+      "title": "GlobalStats",
+      "description": "Aggregated application-wide visit counters, registered students count, and device counts.",
+      "type": "object",
+      "properties": {
+        "totalVisits": {
+          "type": "number",
+          "description": "Total count of all app sessions recorded."
+        },
+        "uniqueDevices": {
+          "type": "number",
+          "description": "Total count of unique devices registered."
+        },
+        "registeredStudentsCount": {
+          "type": "number",
+          "description": "Total count of visitors who completed their profile registration."
+        },
+        "lastUpdated": {
+          "type": "string",
+          "description": "ISO timestamp of the last update."
+        }
+      },
+      "required": ["totalVisits", "uniqueDevices"]
+    }
+  },
+  "firestore": {
+    "/devices/{deviceId}": {
+      "schema": "DeviceVisit",
+      "description": "Stores individual device visit metrics and visitor profile data."
+    },
+    "/visitors/{deviceId}": {
+      "schema": "VisitorProfile",
+      "description": "Stores registered student visitor profile for school directory."
+    },
+    "/stats/visits": {
+      "schema": "GlobalStats",
+      "description": "Stores global app visit, unique device counters, and registered students total."
+    }
+  }
+}
